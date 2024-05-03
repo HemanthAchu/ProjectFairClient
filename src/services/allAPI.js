@@ -29,3 +29,10 @@ export const gethomeProjectAPI = async()=>{
 export const editProjectAPI =async(projectId,reqBody,reqHeader)=>{
     return await commonAPI("PUT",`${SERVER_URL}/edit-project/${projectId}`,reqBody,reqHeader)
 }
+export const removeProjectAPI =async(projectId,reqHeader)=>{
+    return await commonAPI("DELETE",`${SERVER_URL}/removeProject/${projectId}`,{},reqHeader)
+}
+
+export const updateUserAPI =async(reqBody,reqHeader)=>{
+    return await commonAPI("PUT",`${SERVER_URL}/edit-user`,reqBody,reqHeader)
+}

@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Edit from './Edit'
 import Add from './Add'
-import { getuserProjectAPI } from '../services/allAPI'
-import { addResponseContext } from '../contexts/Context'
+import { getuserProjectAPI, removeProjectAPI } from '../services/allAPI'
+import { addResponseContext, editResponseContext } from '../contexts/Context'
 
 function View() {
+  const {editResponse,seteditResponse}=useContext(editResponseContext)
   const {addResponse,setAddResponse}=useContext(addResponseContext)
   const [userProjects,setuserProjects] =useState([])
   console.log(userProjects);
   useEffect(()=>{
     userProject()
-  },[addResponse])
+  },[addResponse,editResponse])
   const userProject= async()=>{
     const token = sessionStorage.getItem("token")
     const reqHeader= {
@@ -24,6 +25,22 @@ function View() {
   }catch(err){
   console.log(err);
   }
+  }
+  const handleDelete =async(projectId)=>{
+const token =sessionStorage.getItem("token")
+if(token){
+  const reqHeader= {
+    "Content-Type":"multipart/form-data",
+    "Authorization":`Bearer ${token}`
+  }
+  const result =await removeProjectAPI(projectId,reqHeader)
+  if(result.status==200){
+    userProject()
+  }else{
+    console.log(result);
+  }
+}
+
   }
   return (
     <div>
@@ -40,7 +57,7 @@ function View() {
         <div className='icons d-flex'>
           <div ><Edit project={projectlist} /></div>
           <a className=' btn'  href={projectlist.github} target='_blank' ><i className='fa-brands fa-github '></i></a>
-          <button className='btn'> <i className='fa-solid fa-trash text-danger'></i>
+          <button onClick={()=>handleDelete(projectlist._id)}  className='btn'> <i className='fa-solid fa-trash text-danger'></i>
           </button>
 
         </div>

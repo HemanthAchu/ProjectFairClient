@@ -1,12 +1,14 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Form,FloatingLabel } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loginAPI, registerAPI } from '../services/allAPI';
+import { tokenAuthContext } from '../contexts/tokenContextAPI';
 function Auth({insideRegister}) {
+  const {isAuthorised,setIsAuthorised} =useContext(tokenAuthContext)
   const navigate =useNavigate()
   const [userInputs,setuserInputs] =useState({
     username:"",
@@ -55,6 +57,7 @@ if(result.status==200){
   //store existingUser and token
   sessionStorage.setItem("existingUser",JSON.stringify(result.data.existingUser))
   sessionStorage.setItem("token",result.data.token)
+  setIsAuthorised(true)
   console.log(JSON.stringify(result.data.token));
   console.log(result.data.token);
   toast.warning(`welcome  ${result.data.existingUser.username}....`)

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { SERVER_URL } from '../services/serverUrl';
 import { toast } from 'react-toastify';
 import { editProjectAPI } from '../services/allAPI';
+import { editResponseContext } from '../contexts/Context';
 
 function Edit({project}) {
+  const {editResponse,seteditResponse}=useContext(editResponseContext)
   console.log(project);
 
   const [projectdata,setprojectdata]=useState({
@@ -22,8 +24,11 @@ function Edit({project}) {
     setpreview("")
 
   }
-  const handleShow = () => setShow(true);
-
+  const handleShow = () => {setShow(true);
+    setprojectdata({
+      id:project._id,title:project?.title,language:project?.language,overview:project?.overview,github:project?.github,website:project?.website,projectImage:""
+    })
+}
   useEffect(()=>{
 if(projectdata.projectImage){
 setpreview(URL.createObjectURL(projectdata.projectImage))
@@ -53,13 +58,14 @@ const reqBody = new FormData()
           "Authorization":`Bearer ${token}`
       }
       try{
-const result = await editProjectAPI(projectdata._id,reqBody,reqHeader)
+const result = await editProjectAPI(projectdata.id,reqBody,reqHeader)
 console.log(result);
-if(result.ststus==200){
+if(result.status==200){
   handleClose()
+  seteditResponse(result)
 //pass response view
 }else{
-  console.log(result.response);
+  console.log(result.data);
 }
       }catch(err){
 

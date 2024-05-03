@@ -24,7 +24,7 @@ function Add() {
 
   };
   const handleShow = () => setShow(true);
-  // console.log(projectDetails);
+  console.log(projectDetails);
 
   useEffect(() => {
     if (projectDetails.projectImage.type == "image/png" || projectDetails.projectImage.type == "image/jpg" || projectDetails.projectImage.type == "image/jpeg") {
@@ -106,7 +106,7 @@ function Add() {
               <label className='d-flex justify-content-center align-items-center' >
                 <input type="file" style={{ display: 'none' }}
 
-                  onChange={(e) => setprojectDetails({ ...projectDetails, projectImage: e.target })}
+                  onChange={(e) => setprojectDetails({ ...projectDetails, projectImage: e.target.files[0] })}
 
 
                 />
